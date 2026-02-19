@@ -1,0 +1,12 @@
+# Render Blueprint - optional one-click deploy
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: financial-crime-engine
+    runtime: node
+    region: oregon
+    buildCommand: npm run build
+    startCommand: npm run start-server
+    envVars:
+      - key: NODE_ENV
+        value: production

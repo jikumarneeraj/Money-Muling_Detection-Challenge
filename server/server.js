@@ -25,6 +25,15 @@ app.get('/', (req, res) => {
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
 
+// Serve client build in production (e.g. on Render)
+const clientDist = path.join(__dirname, '../client/dist');
+if (process.env.NODE_ENV === 'production' && fs.existsSync(clientDist)) {
+    app.use(express.static(clientDist));
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(clientDist, 'index.html'));
+    });
+}
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
