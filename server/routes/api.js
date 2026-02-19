@@ -47,19 +47,24 @@ router.post('/upload', upload.single('file'), async (req, res) => {
         const timeInSeconds = (endTime[0] + endTime[1] / 1e9).toFixed(2);
 
         const responsePayload = {
-            suspicious_accounts,
-            fraud_rings,
+            suspicious_accounts: suspicious_accounts.map(acc => ({
+                account_id: acc.account_id,
+                suspicion_score: acc.suspicion_score,
+                detected_patterns: acc.detected_patterns,
+                ring_id: acc.ring_id
+            })),
+            fraud_rings: fraud_rings.map(ring => ({
+                ring_id: ring.ring_id,
+                member_accounts: ring.member_accounts,
+                pattern_type: ring.pattern_type,
+                risk_score: ring.risk_score
+            })),
             summary: {
                 total_accounts_analyzed: nodes.size,
                 suspicious_accounts_flagged: suspicious_accounts.length,
                 fraud_rings_detected: fraud_rings.length,
                 processing_time_seconds: parseFloat(timeInSeconds)
-            },
-            // Optional: Send graph data for visualization if needed, 
-            // but requirements ask for exact JSON format for output. 
-            // We might need a separate endpoint for full graph or include it specially 
-            // if the frontend demands it, but strict output requirements are for the detection result.
-            // We will stick to strict requirement for this payload.
+            }
         };
 
         // Format response to strictly match requirements
