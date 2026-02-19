@@ -16,11 +16,6 @@ app.use(express.json());
 // Upload setup
 const upload = multer({ dest: 'uploads/' });
 
-// Basic Route
-app.get('/', (req, res) => {
-    res.send('Financial Crime Detection Engine API');
-});
-
 // API Routes
 const apiRoutes = require('./routes/api');
 app.use('/api', apiRoutes);
